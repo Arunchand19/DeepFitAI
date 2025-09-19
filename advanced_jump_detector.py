@@ -73,11 +73,11 @@ class AdvancedJumpDetector:
             self.mongo_client.admin.command('ping')
             self.mongo_db = self.mongo_client['sih2573']
             self.mongo_collection = self.mongo_db['Vertical_Jump']
-            print("✅ MongoDB connected successfully")
+            print("[SUCCESS] MongoDB connected successfully")
             print(f"Database: {self.mongo_db.name}")
             print(f"Collection: {self.mongo_collection.name}")
         except (ConnectionFailure, ServerSelectionTimeoutError) as e:
-            print(f"⚠️ MongoDB connection failed: {e}")
+            print(f"[WARNING] MongoDB connection failed: {e}")
             self.mongo_client = None
         
     def calculate_pixels_per_cm(self, landmarks):
@@ -408,7 +408,7 @@ class AdvancedJumpDetector:
     def save_to_mongodb(self):
         """Save session data to MongoDB"""
         if not self.jump_history:
-            print("⚠️ No data to save")
+            print("[WARNING] No data to save")
             return False
         
         session_data = {
@@ -426,11 +426,11 @@ class AdvancedJumpDetector:
         if self.mongo_client:
             try:
                 result = self.mongo_collection.insert_one(session_data)
-                print(f"✅ Data saved to MongoDB: {result.inserted_id}")
+                print(f"[SUCCESS] Data saved to MongoDB: {result.inserted_id}")
                 print(f"Database: USER, Collection: Vertical_Jump")
                 return True
             except Exception as e:
-                print(f"❌ MongoDB save failed: {e}")
+                print(f"[ERROR] MongoDB save failed: {e}")
                 print(f"Error details: {str(e)}")
         
         # Fallback to JSON
@@ -439,10 +439,10 @@ class AdvancedJumpDetector:
             filepath = os.path.join(self.data_dir, filename)
             with open(filepath, 'w') as f:
                 json.dump(session_data, f, indent=2)
-            print(f"✅ Fallback: Data saved to {filepath}")
+            print(f"[SUCCESS] Fallback: Data saved to {filepath}")
             return True
         except Exception as e:
-            print(f"❌ Save failed: {e}")
+            print(f"[ERROR] Save failed: {e}")
             return False
     
     def get_performance_stats(self):

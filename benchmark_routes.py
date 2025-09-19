@@ -9,9 +9,9 @@ benchmark_bp = Blueprint('benchmarks', __name__)
 # Initialize the benchmark system
 try:
     benchmark_system = DynamicBenchmarkSystem()
-    print("✓ Dynamic benchmark system initialized successfully")
+    print("[SUCCESS] Dynamic benchmark system initialized successfully")
 except Exception as e:
-    print(f"✗ Error initializing benchmark system: {e}")
+    print(f"[ERROR] Error initializing benchmark system: {e}")
     benchmark_system = None
 
 @benchmark_bp.route('/api/match_athlete', methods=['POST'])
